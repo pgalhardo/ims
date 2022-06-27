@@ -2,7 +2,7 @@
  * Author: Pedro Miguel da Silva Galhardo
  * Date: September/2021
  * 
- * Specification, in ASL, of an electronic invoicing system
+ * ASL specification of Invoice Management System (IMS)
  */
 
 Package ims
