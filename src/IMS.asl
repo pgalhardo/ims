@@ -273,7 +273,6 @@ UIContainer Customers "Customers" : Window [
   component CustomerList : List : List_Table [
     dataBinding e_Customer
       [ orderBy e_Customer.customerName DESC ]
-
   ]
   
   component uiCo_Filter_Customer : Details
@@ -315,58 +314,3 @@ ContextActor aT_BeginningOfYear : Timer [
 ContextActor aT_InvoiceNotPaidAfter30d : Timer [
 	description "Invoices not paid after 30d of issue"
 ]
-
-/********************************************************
-   Enumerations
-*********************************************************/
-
-DataEnumeration enum_DocType "Tipo de documento"
-	values (
-		"Fatura",
-		"Nota de crédito"
-	)
-
-DataEnumeration tipoFact "Tipo de faturação eletrónica"
-	values (
-		"Não definido",
-		"Não usa",
-		"Através de plataforma",
-		"Automática (integrada)"
-	)
-	
-DataEnumeration estadosf "Estado da integração da faturação eletrónica"
-	values (
-		"Por submeter",
-		"Processamento aceite",
-		"Processamento rejeitado",
-		"Submetido manualmente",
-		"Em processamento",
-		"Recebido",
-		"Regularização",
-		"Devolução",
-		"Emissão de pagamento",
-		"Pago",
-		"Processado",
-		"Aceitação da NC"
-	)
-	
-DataEnumeration meioPaga "Forma de pagamento"
-	values (
-		"Numerário",
-		"Cheque",
-		"Cartão débito",
-		"Cartão crédito",
-		"Transferência bancária",
-		"Ticket restaurante"
-	)
-	
-DataEnumeration tipoEfac "Tipo de faturação eletrónica automática"
-	values (
-		"ESPAP",
-		"SAPHETY"
-	)
-	
-DataEnumeration platafor "Plataforma de submissão manual"
-	values (
-		"ILINK"
-	)
