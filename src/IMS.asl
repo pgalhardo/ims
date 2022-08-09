@@ -1,8 +1,5 @@
 /*
- * Author: Pedro Miguel da Silva Galhardo
- * Date: September/2021
- * 
- * ASL specification of Invoice Management System (IMS)
+ * ASL specification of the Invoice Management System (IMS)
  */
 
 Package ims
@@ -50,23 +47,21 @@ DataEntity e_CustomerVIP "CustomerVIP" : Master [
 
 DataEntity e_Invoice "Invoice" : Document [
     attribute ID "Invoice ID" : Integer [constraints (PrimaryKey NotNull Unique)]
+    attribute type "Type" : DataEnumeration enum_DocumentType
     attribute customerID "Customer ID" : Integer [ constraints (NotNull ForeignKey(e_Customer)) ]
     attribute dateCreation "Creation Date" : Date [defaultValue "today" constraints (NotNull)]
     attribute dateApproval "Approval Date" : Date
     attribute datePaid "Payment Date" : Date
     attribute dateDeleted "Delete Date" : Date
     attribute isApproved "Is Approved" : Boolean [defaultValue "False"]
-    
     attribute totalValueWithoutVAT "Total Value Without VAT" : Decimal(16.2) [
         formula details : sum (e_InvoiceLine.valueWithoutVAT)
         constraints (NotNull)
     ]
-    
     attribute totalValueWithVAT "Total Value With VAT" : Decimal(16.2) [
         formula details : sum (e_InvoiceLine.valueWithVAT)
         constraints (NotNull)
     ]
-    
     attribute totalInvoiceLines "Total invoice lines" : Integer [
         formula details : count (e_InvoiceLine)
     ]
@@ -78,149 +73,97 @@ DataEntity e_InvoiceLine "InvoiceLine" : Document [
     attribute productID "Product ID" : Integer [constraints (NotNull ForeignKey(e_Product))]
     attribute order "InvoiceLine Order" : Integer [constraints (NotNull)]
     attribute valueWithoutVAT "Value Without VAT" : Decimal
-    
     attribute valueWithVAT "Value With VAT" : Decimal [
         formula arithmetic (e_InvoiceLine.valueWithoutVAT * e_Product.VATValue)
     ]
-
-    //check ck_InvoiceLine1 "isUnique(invoiceID+order)"
 ]
 
 /********************************************************
     Forms
 *********************************************************/
 
-// INVOICE
+// "Invoice" Form
+
+component uiCo_InvoiceForm "Invoice" : Form [
+    dataBinding e_Invoice
+    
+    part customer "Customer" : Field : Field_Input
+        [ dataAttributeBinding e_Customer.customerName ]
+    part dateCreation "Creation Date" : Field : Field_Input
+        [ dataAttributeBinding e_Invoice.dateCreation ]
+    part dateApproval "Approval Date" : Field : Field_Input
+        [ showIf (e_Invoice.dateCreation != "") dataAttributeBinding e_Invoice.dateApproval ]
+    part datePaid "Payment Date" : Field : Field_Input
+        [ showIf (e_Invoice.dateApproval != "") dataAttributeBinding e_Invoice.datePaid ]
+    part dateDeleted "Delete Date" : Field : Field_Input
+        [ dataAttributeBinding e_Invoice.dateDeleted ]
+    part totalValueWithoutVAT "Total Value Without VAT" : Field : Field_Input
+        [ dataAttributeBinding e_Invoice.totalValueWithoutVAT ]
+    part totalValueWithVAT "Total Value With VAT" : Field : Field_Input
+        [ dataAttributeBinding e_Invoice.totalValueWithVAT ]
+]
 
 UIContainer uiCt_InvoiceCreator : Window [
-    component uiCo_CreateInvoice "Invoice" : Form [
-        dataBinding e_Invoice
-        
-        part client "Client" : Field : Field_Input
-            [ dataAttributeBinding e_Customer.customerName ]
-        part dateCreation "Creation Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateCreation ]
-        part dateApproval "Approval Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateApproval ]
-        part datePaid "Payment Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.datePaid ]
-        part dateDeleted "Delete Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateDeleted ]
-        part totalValueWithoutVAT "Total Value Without VAT" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.totalValueWithoutVAT ]
-        part totalValueWithVAT "Total Value With VAT" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.totalValueWithVAT ]
-            
-        event ev_cancel "Back" : Submit : Submit_Back
-            [ navigationFlowTo Invoices ]
-            
-        event ev_save "Save" : Submit : Submit_Create
-            [ navigationFlowTo Invoices ]
-    ]
+    component uiCo_InvoiceForm
+    
+    event ev_cancel "Back": Submit: Submit_Back [navigationFlowTo Invoices]
+    event ev_save "Save": Submit: Submit_Create [navigationFlowTo Invoices]
 ]
 
 UIContainer uiCt_InvoiceReader : Window [
-    component uiCo_ReadInvoice "Invoice" : Form [
-        dataBinding e_Invoice
-        
-        part client "Client" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.customerName ]
-        part dateCreation "Creation Date" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.dateCreation ]
-        part dateApproval "Approval Date" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.dateApproval ]
-        part datePaid "Payment Date" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.datePaid ]
-        part dateDeleted "Delete Date" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.dateDeleted ]
-        part totalValueWithoutVAT "Total Value Without VAT" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.totalValueWithoutVAT ]
-        part totalValueWithVAT "Total Value With VAT" : Field : Field_Output
-            [ dataAttributeBinding e_Invoice.totalValueWithVAT ]
-            
-        event ev_cancel "Back" : Submit : Submit_Back
-            [ navigationFlowTo Invoices ]
-    ]
+    component uiCo_InvoiceForm
+    
+    event ev_cancel "Back" : Submit : Submit_Back [ navigationFlowTo Invoices ]
 ]
 
 UIContainer uiCt_InvoiceEditor : Window [
-    component uiCo_EditInvoice "Invoice" : Form [
-        dataBinding e_Invoice
-        
-        part client "Client" : Field : Field_Input
-            [ dataAttributeBinding e_Customer.customerName ]
-        part dateCreation "Creation Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateCreation ]
-        part dateApproval "Approval Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateApproval ]
-        part datePaid "Payment Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.datePaid ]
-        part dateDeleted "Delete Date" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.dateDeleted ]
-        part totalValueWithoutVAT "Total Value Without VAT" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.totalValueWithoutVAT ]
-        part totalValueWithVAT "Total Value With VAT" : Field : Field_Input
-            [ dataAttributeBinding e_Invoice.totalValueWithVAT ]
-            
-        event ev_cancel "Back" : Submit : Submit_Back
-            [ navigationFlowTo Invoices ]
-            
-        event ev_save "Save" : Submit : Submit_Update
-            [ navigationFlowTo Invoices ]
-        ]
+    component uiCo_InvoiceForm
+    
+	event ev_cancel "Back" : Submit : Submit_Back [ navigationFlowTo Invoices ]        
+    event ev_save "Save" : Submit : Submit_Update [ navigationFlowTo Invoices ]
 ]
 
-// CUSTOMER
+// "Customer" Form
+
+component uiCo_CustomerForm "Customer" : Form [
+    dataBinding e_Customer
+        
+    part customerName "Name" : Field
+        [ dataAttributeBinding e_Customer.customerName ]
+    part fiscalID "Fiscal ID" : Field
+        [ dataAttributeBinding e_Customer.fiscalID ]
+    part logoImage "Logo Image" : Field
+        [ dataAttributeBinding e_Customer.logoImage ]
+    part address "Address" : Field
+        [ dataAttributeBinding e_Customer.address ]
+    part IBAN "IBAN" : Field
+        [ dataAttributeBinding e_Customer.IBAN ]
+    part SWIFT "SWIFT" : Field
+        [ dataAttributeBinding e_Customer.SWIFT ]
+]
 
 UIContainer uiCt_CustomerCreator : Window [
-    component uiCo_CreateCustomer "Customer" : Form [
-        dataBinding e_Customer
-            
-        part customerName "Name" : Field
-            [ dataAttributeBinding e_Customer.customerName ]
-        part fiscalID "Fiscal ID" : Field
-            [ dataAttributeBinding e_Customer.fiscalID ]
-        part logoImage "Logo Image" : Field
-            [ dataAttributeBinding e_Customer.logoImage ]
-        part address "Address" : Field
-            [ dataAttributeBinding e_Customer.address ]
-        part IBAN "IBAN" : Field
-            [ dataAttributeBinding e_Customer.IBAN ]
-        part SWIFT "SWIFT" : Field
-            [ dataAttributeBinding e_Customer.SWIFT ]
-            
-        event ev_cancel "Back" : Submit : Submit_Back
-                [ navigationFlowTo Customers ]
-                
-            event ev_create "Create" : Submit : Submit_Create
-                [ navigationFlowTo Customers ]
-    ]
+    component uiCo_CustomerForm
+    
+    event ev_cancel "Back" : Submit : Submit_Back [ navigationFlowTo Customers ]
+    event ev_save "Save" : Submit : Submit_Create [ navigationFlowTo Customers ]
 ]
 
 UIContainer uiCt_CustomerReader : Window [
-    component uiCo_ReadCustomer "Customer" : Form [
-        dataBinding e_Customer
-            
-        part customerName "Name" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.customerName ]
-        part fiscalID "Fiscal ID" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.fiscalID ]
-        part logoImage "Logo Image" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.logoImage ]
-        part address "Address" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.address ]
-        part IBAN "IBAN" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.IBAN ]
-        part SWIFT "SWIFT" : Field : Field_Output
-            [ dataAttributeBinding e_Customer.SWIFT ]
-            
-        event ev_cancel "Back" : Submit : Submit_Back
-                [ navigationFlowTo Customers ]
-    ]
+    component uiCo_CustomerForm
+    
+    event ev_cancel "Back" : Submit : Submit_Back [ navigationFlowTo Customers ]
+]
+
+UIContainer uiCt_CustomerEditor : Window [
+    component uiCo_CustomerForm
+    
+	event ev_cancel "Back" : Submit : Submit_Back [ navigationFlowTo Invoices ]        
+    event ev_save "Save" : Submit : Submit_Update [ navigationFlowTo Invoices ]
 ]
 
 /********************************************************
-     Modules & Menus
+	Pages
 *********************************************************/
 
 UIContainer MainPage : Window [
@@ -289,33 +232,38 @@ UIContainer Customers "Customers" : Window [
     Actors & Use Cases
 *********************************************************/
 
-ContextActor aU_TechnicalAdmin "TechnicalAdmin" : User [
+Actor aU_TechnicalAdmin "TechnicalAdmin" : User [
     description "Admin manage Users, VAT, etc."
 ]
-ContextActor aU_Operator "Operator" : User [
+Actor aU_Operator "Operator" : User [
     description "Operator manages Invoices and Customers"
 ]
-ContextActor aU_Manager "Manager" : User [
+Actor aU_Manager "Manager" : User [
     description "Manager approves Invoices, etc."
 ]
-ContextActor aU_Customer "Customer" : User [
+Actor aU_Customer "Customer" : User [
     description "Customer receives Invoices to pay"
 ]
-ContextActor aS_ERP "ERP" : ExternalSystem [
+Actor aS_ERP "ERP" : ExternalSystem [
     description "ERP receives info of paid invoices"
 ]
-ContextActor aT_BeginningOfYear : Timer [
-    description "Beginning of each Year"
+
+UseCase uc_CreateInvoice "Create Invoice" : EntityCreate [
+  actorInitiates aU_Operator
+  dataEntity e_Invoice
+  actions aCreate
 ]
-ContextActor aT_InvoiceNotPaidAfter30d : Timer [
-    description "Invoices not paid after 30d of issue"
+UseCase uc_PrintInvoice "Print Invoice" : EntityReport [
+  actorInitiates aU_Customer
+  dataEntity e_Invoice
+  actions aRead
 ]
 
 /********************************************************
     Data enumerations
 *********************************************************/
 
-DataEnumeration DocumentType "Document Type" values (
+DataEnumeration enum_DocumentType "Document Type" values (
     SI "Standard Invoice",
     CI "Credit Invoice",
     DI "Debit Invoice",
