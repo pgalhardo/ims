@@ -1,9 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GENARRS_list>
-    <GENARRS CODARRS="3bd7ca6b-7576-4947-85b7-fa5c64dfb963" NARR="enum_DocumentType" TIPO="C" COMPR="2" NOMEARR="Document Type" SINGARR="Document Type">
-        <GENELARR CODELARR="71b606e1-1db2-426c-bdbd-8c0256075e80" ORDEM="1" CONT="Standard Invoice" CODIGO="SI" />
-        <GENELARR CODELARR="4fedd260-acf4-46a3-9903-aab2f40929e7" ORDEM="2" CONT="Credit Invoice" CODIGO="CI" />
-        <GENELARR CODELARR="cc9d8bdb-855c-4167-934b-565587566da3" ORDEM="3" CONT="Debit Invoice" CODIGO="DI" />
-        <GENELARR CODELARR="7299c9b3-dc82-41ae-9817-05eb29dff40f" ORDEM="4" CONT="Mixed Invoice" CODIGO="MI" />
-    </GENARRS>
 </GENARRS_list>
