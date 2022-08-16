@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GENNIVAC_list>
+    <GENNIVAC CODNIVAC="5bceb37e-df46-45c2-ae76-dc6125a0af9d" LEVELCOD="aU_Customer" DESIGN="Customer" AREA="GRP" NIVEL="-1" />
+    <GENNIVAC CODNIVAC="6b511a0d-9b46-4d46-9025-899f4eb830a2" LEVELCOD="aU_TechnicalAdmin" DESIGN="TechnicalAdmin" AREA="GRP" NIVEL="-1" />
+    <GENNIVAC CODNIVAC="ca609d96-68d6-47d6-98ed-ac789bb314c6" LEVELCOD="aU_Operator" DESIGN="Operator" AREA="GRP" NIVEL="-1" />
+    <GENNIVAC CODNIVAC="77209a6b-be37-4eaa-9f41-665938906328" LEVELCOD="aU_Manager" DESIGN="Manager" AREA="GRP" NIVEL="-1" />
+</GENNIVAC_list>
