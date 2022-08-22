@@ -17,7 +17,7 @@ System IMS "Invoice Management System" : Application : Application_Web
 DataEntity e_VAT "VAT Category" : Reference [
     attribute VATCode "VAT code" : String [constraints (PrimaryKey NotNull Unique)]
     attribute VATName "VAT name" : String
-    attribute VATValue "VAT value" : String
+    attribute VATValue "VAT value" : Decimal
     
     constraints ( showAs(VATName) )
 ]
@@ -92,7 +92,7 @@ DataEntity e_InvoiceLine "InvoiceLine" : Document [
     Actors & Use Cases
 *********************************************************/
 
-Actor aU_TechnicalAdmin "TechnicalAdmin" : User [ description "Admin manage Users, VAT, etc." ]
+Actor aU_TechnicalAdmin "Technical Admin" : User [ description "Admin manage Users, VAT, etc." ]
 Actor aU_Operator "Operator" : User [ description "Operator manages Invoices and Customers" ]
 Actor aU_Manager "Manager" : User [ description "Manager approves Invoices, etc." ]
 Actor aU_Customer "Customer" : User [ description "Customer receives Invoices to pay" ]
